@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import {
   RotateCcw,
@@ -8,7 +9,6 @@ import {
   Sparkles,
   Heart,
 } from 'lucide-react';
-import { RECIPIENT_PHONE_NUMBER } from '../config/recipient';
 
 interface FinalScreenProps {
   onReplay: () => void;
@@ -22,42 +22,32 @@ const PREFILLED_MESSAGE =
 export function FinalScreen({ onReplay }: FinalScreenProps) {
   const [replyInitiated, setReplyInitiated] = useState(false);
 
-  // Clean phone number from the source code configuration
-  const cleanPhone = RECIPIENT_PHONE_NUMBER.replace(/[^0-9]/g, '');
-
   const handleOpenWhatsApp = () => {
-    if (!cleanPhone) return;
-
     const encodedText = encodeURIComponent(PREFILLED_MESSAGE);
-    const waUrl = `https://wa.me/${cleanPhone}?text=${encodedText}`;
+    const waUrl = `https://wa.me/?text=${encodedText}`;
 
     setReplyInitiated(true);
 
-    const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
-    if (!win) {
-      window.location.href = waUrl;
-    }
+    // Open WhatsApp without specifying a recipient number.
+    window.location.href = waUrl;
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col items-center px-4 py-6 sm:py-8 animate-in fade-in duration-500">
-      {/* Dedication Tag */}
+    <div className="w-full max-w-2xl mx-auto flex flex-col items-center px-4 py-6 sm:py-8 animate-entrance">
       <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-700/80 mb-3 tracking-wide">
         <Sparkles className="w-4 h-4 text-rose-500" />
         <span>Chapter 1: Forever Begins Today</span>
       </div>
 
-      {/* Final Heading */}
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#4C0519] tracking-tight leading-tight text-center max-w-xl text-balance mb-3">
         One YES. A Million Beautiful Memories Ahead. 💖
       </h1>
 
-      {/* Description */}
       <p className="text-base sm:text-lg text-rose-950/80 text-center max-w-lg mb-8 leading-relaxed">
-        You just made someone incredibly happy. Here's to our silly moments, endless laughter, unforgettable memories, and a love that keeps growing.
+        You just made someone incredibly happy. Here's to our silly moments,
+        endless laughter, unforgettable memories, and a love that keeps growing.
       </p>
 
-      {/* Cute Vows & Perks Grid */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-8">
         <div className="p-4 rounded-2xl bg-white/80 border border-rose-100 shadow-xs flex items-start gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-amber-100/80 flex items-center justify-center shrink-0 text-amber-700">
@@ -108,7 +98,6 @@ export function FinalScreen({ onReplay }: FinalScreenProps) {
         </div>
       </div>
 
-      {/* Romantic Reply Card (Completely Clean & Free of Setup Controls) */}
       <div className="w-full rounded-3xl bg-white border border-rose-200/80 p-5 sm:p-6 shadow-md shadow-rose-900/5 mb-8 text-center">
         <div className="flex items-center justify-center gap-2 mb-3">
           <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
@@ -121,38 +110,31 @@ export function FinalScreen({ onReplay }: FinalScreenProps) {
           "{PREFILLED_MESSAGE}"
         </blockquote>
 
-        {/* Action Button */}
-        {cleanPhone ? (
-          <div className="flex flex-col items-center gap-2.5">
-            <button
-              id="whatsapp_reply_button"
-              type="button"
-              onClick={handleOpenWhatsApp}
-              className="w-full min-h-[52px] px-6 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20BA5A] text-white font-bold text-base sm:text-lg shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 hover:-translate-y-0.5 active:scale-95 transition-all duration-150 flex items-center justify-center gap-2.5 cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400"
-            >
-              <svg className="w-6 h-6 fill-white shrink-0" viewBox="0 0 24 24">
-                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.067-2.036-.49-1.637-.679-2.73-2.348-2.812-2.457-.082-.109-.667-.887-.667-1.692s.422-1.203.571-1.367c.149-.164.326-.205.435-.205.109 0 .218.001.313.006.101.005.236-.039.369.281.137.33.468 1.144.509 1.228.041.084.068.183.014.292-.054.109-.081.178-.163.273-.082.095-.172.213-.245.286-.082.082-.167.171-.072.335.095.163.424.698.908 1.13 1.05.934 1.932 1.223 2.204 1.358.272.136.435.114.598-.073.163-.187.697-.812.883-1.091.187-.279.373-.233.626-.14.253.093 1.605.757 1.881.895.276.138.459.207.527.323.068.116.068.672-.076 1.077z" />
-              </svg>
-              <span className="whitespace-nowrap">Send My Reply on WhatsApp 💚</span>
-            </button>
-            <p className="text-[11px] text-rose-900/60 font-normal">
-              Opens WhatsApp with your prefilled reply. You will press Send inside WhatsApp.
-            </p>
-          </div>
-        ) : (
-          <div className="p-3 rounded-xl bg-rose-50 text-rose-800 text-xs text-center">
-            WhatsApp reply is currently not configured.
-          </div>
-        )}
+        <div className="flex flex-col items-center gap-2.5">
+          <button
+            id="whatsapp_reply_button"
+            type="button"
+            onClick={handleOpenWhatsApp}
+            className="w-full min-h-[52px] px-6 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20BA5A] text-white font-bold text-base sm:text-lg shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 hover:-translate-y-0.5 active:scale-95 transition-all duration-150 flex items-center justify-center gap-2.5 cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400"
+          >
+            <svg className="w-6 h-6 fill-white shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.067-2.036-.49-1.637-.679-2.73-2.348-2.812-2.457-.082-.109-.667-.887-.667-1.692s.422-1.203.571-1.367c.149-.164.326-.205.435-.205.109 0 .218.001.313.006.101.005.236-.039.369.281.137.33.468 1.144.509 1.228.041.084.068.183.014.292-.054.109-.081.178-.163.273-.082.095-.172.213-.245.286-.082.082-.167.171-.072.335.095.163.424.698.908 1.13 1.05.934 1.932 1.223 2.204 1.358.272.136.435.114.598-.073.163-.187.697-.812.883-1.091.187-.279.373-.233.626-.14.253.093 1.605.757 1.881.895.276.138.459.207.527.323.068.116.068.672-.076 1.077z" />
+            </svg>
+            <span className="whitespace-nowrap">Send My Reply on WhatsApp 💚</span>
+          </button>
+
+          <p className="text-[11px] text-rose-900/60 font-normal">
+            Opens WhatsApp with your prefilled reply. Choose a recipient and press Send.
+          </p>
+        </div>
 
         {replyInitiated && (
-          <div className="mt-3 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs text-center animate-in fade-in duration-200">
-            WhatsApp opened! Hit Send inside your chat to seal the promise.
-          </div>
+          <p className="mt-3 text-xs text-emerald-800">
+            Continue in WhatsApp to choose a recipient and send your message.
+          </p>
         )}
       </div>
 
-      {/* Replay Button */}
       <div className="flex flex-col items-center gap-2">
         <button
           id="replay_button"
