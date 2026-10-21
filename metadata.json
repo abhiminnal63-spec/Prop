@@ -1,0 +1,8 @@
+{
+  "name": "My Love",
+  "description": "An interactive romantic proposal experience celebrating love, laughter, and forever memories.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
