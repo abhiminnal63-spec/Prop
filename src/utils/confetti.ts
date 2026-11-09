@@ -3,16 +3,15 @@ import confetti from 'canvas-confetti';
 export function fireCelebrationConfetti() {
   if (typeof window === 'undefined') return;
 
-  // Check reduced motion preference
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) return;
 
-  // Center romantic burst
+  // Center romantic burst with project kawaii colors
   confetti({
     particleCount: 80,
     spread: 70,
     origin: { y: 0.6 },
-    colors: ['#F43F5E', '#E11D48', '#FB7185', '#FDA4AF', '#F472B6', '#FBBF24', '#FFFFFF'],
+    colors: ['#F3A0B4', '#B94E68', '#84364F', '#FAD5E0', '#FFF8F0', '#FBBF24', '#FFFFFF'],
     shapes: ['circle', 'square'],
     scalar: 1.1,
     ticks: 200,
@@ -25,7 +24,7 @@ export function fireCelebrationConfetti() {
       angle: 60,
       spread: 55,
       origin: { x: 0, y: 0.7 },
-      colors: ['#F43F5E', '#BE185D', '#F472B6', '#FDA4AF', '#FCD34D'],
+      colors: ['#F3A0B4', '#B94E68', '#84364F', '#FAD5E0', '#FDE047'],
     });
   }, 200);
 
@@ -36,7 +35,7 @@ export function fireCelebrationConfetti() {
       angle: 120,
       spread: 55,
       origin: { x: 1, y: 0.7 },
-      colors: ['#F43F5E', '#BE185D', '#F472B6', '#FDA4AF', '#FCD34D'],
+      colors: ['#F3A0B4', '#B94E68', '#84364F', '#FAD5E0', '#FDE047'],
     });
   }, 400);
 }

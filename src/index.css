@@ -2,23 +2,46 @@
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Nunito', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #FCE8EF;
   }
   
-  h1, h2, h3, .font-display {
-    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-  }
-
-  .font-handwriting {
-    font-family: 'Caveat', cursive;
+  h1, h2, h3, .font-display, .font-fredoka {
+    font-family: 'Fredoka', 'Nunito', sans-serif;
   }
 }
 
-/* Keyframe animations for entrance and floating elements */
+/* Subtle pink grid-paper background pattern matching reference design */
+.bg-grid-paper {
+  background-color: #FCE8EF;
+  background-image: 
+    linear-gradient(to right, rgba(132, 54, 79, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(132, 54, 79, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Window Panel Drop Shadows and borders */
+.shadow-kawaii {
+  box-shadow: 4px 6px 0px #84364F, 0px 10px 24px rgba(132, 54, 79, 0.12);
+}
+
+.shadow-kawaii-sm {
+  box-shadow: 2px 3px 0px #84364F;
+}
+
+.shadow-kawaii-pill {
+  box-shadow: 0px 4px 0px #84364F;
+}
+
+.border-burgundy {
+  border-color: #84364F;
+}
+
+/* Keyframe animations */
 @keyframes entranceFadeScale {
   0% {
     opacity: 0;
-    transform: scale(0.95) translateY(12px);
+    transform: scale(0.97) translateY(8px);
   }
   100% {
     opacity: 1;
@@ -31,7 +54,7 @@
     transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-12px) rotate(4deg);
+    transform: translateY(-8px) rotate(3deg);
   }
 }
 
@@ -40,18 +63,27 @@
     transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-8px) rotate(-4deg);
+    transform: translateY(-6px) rotate(-3deg);
   }
 }
 
 @keyframes pulseGently {
   0%, 100% {
     transform: scale(1);
-    opacity: 1;
   }
   50% {
-    transform: scale(1.05);
-    opacity: 0.92;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes sparkleSpin {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15) rotate(15deg);
+    opacity: 1;
   }
 }
 
@@ -61,13 +93,13 @@
     opacity: 1;
   }
   100% {
-    transform: scale(1.4) translateY(-80px);
+    transform: scale(1.3) translateY(-70px);
     opacity: 0;
   }
 }
 
 .animate-entrance {
-  animation: entranceFadeScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: entranceFadeScale 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-float-slow {
@@ -82,11 +114,16 @@
   animation: pulseGently 3s ease-in-out infinite;
 }
 
+.animate-sparkle {
+  animation: sparkleSpin 4s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-entrance,
   .animate-float-slow,
   .animate-float-reverse,
-  .animate-pulse-gentle {
+  .animate-pulse-gentle,
+  .animate-sparkle {
     animation: none !important;
   }
   * {

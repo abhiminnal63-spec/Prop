@@ -7,42 +7,44 @@ interface CoupleIllustrationProps {
   variant?: 'landing' | 'proposal' | 'celebration';
 }
 
-export function CoupleIllustration({ src, alt, className = '', variant = 'landing' }: CoupleIllustrationProps) {
+export function CoupleIllustration({
+  src,
+  alt,
+  className = '',
+  variant = 'landing',
+}: CoupleIllustrationProps) {
   const [error, setError] = useState(false);
 
   if (error) {
-    // Resilient styled fallback container
     return (
       <div
-        className={`w-full aspect-square max-w-sm mx-auto rounded-3xl bg-gradient-to-br from-rose-100 via-pink-50 to-purple-100 border border-rose-200/60 p-6 flex flex-col items-center justify-center text-center shadow-lg shadow-rose-900/5 ${className}`}
+        className={`w-full aspect-square max-w-[280px] sm:max-w-[320px] mx-auto rounded-[22px] bg-[#FFF8F0] border-[2.5px] border-[#84364F] shadow-kawaii-sm p-6 flex flex-col items-center justify-center text-center ${className}`}
       >
-        <div className="w-20 h-20 rounded-full bg-rose-200/50 flex items-center justify-center mb-3">
+        <div className="w-16 h-16 rounded-full bg-[#FAD5E0] border-[2px] border-[#84364F] flex items-center justify-center mb-2">
           {variant === 'proposal' ? (
-            <span className="text-4xl" role="img" aria-label="Ring">💍</span>
+            <span className="text-3xl" role="img" aria-label="Ring">💍</span>
           ) : variant === 'celebration' ? (
-            <span className="text-4xl" role="img" aria-label="Celebration">🎉</span>
+            <span className="text-3xl" role="img" aria-label="Celebration">🎉</span>
           ) : (
-            <span className="text-4xl" role="img" aria-label="Love couple">👩‍❤️‍👨</span>
+            <span className="text-3xl" role="img" aria-label="Love couple">👩‍❤️‍👨</span>
           )}
         </div>
-        <p className="text-rose-950 font-medium text-sm">Two Hearts, One Journey</p>
-        <span className="text-xs text-rose-700/80 mt-1">❤️ Always & Forever</span>
+        <p className="text-[#84364F] font-bold text-sm">Two Hearts, One Journey</p>
+        <span className="text-xs text-[#B94E68] mt-1 font-semibold">♡ Always & Forever ♡</span>
       </div>
     );
   }
 
   return (
-    <div className={`relative max-w-xs sm:max-w-sm md:max-w-md mx-auto group ${className}`}>
-      {/* Soft romantic glowing aura behind illustration */}
-      <div className="absolute -inset-2 bg-gradient-to-r from-rose-200/50 via-pink-200/40 to-purple-200/40 rounded-3xl blur-md -z-10 transition-opacity duration-300 group-hover:opacity-100" />
-      
-      <div className="relative overflow-hidden rounded-3xl border border-rose-200/70 shadow-lg shadow-rose-950/5 bg-white">
+    <div className={`relative max-w-[280px] sm:max-w-[320px] mx-auto group ${className}`}>
+      {/* Decorative cloud/soft border framing */}
+      <div className="relative overflow-hidden rounded-[22px] border-[2.5px] border-[#84364F] shadow-kawaii-sm bg-white">
         <img
           src={src}
           alt={alt}
           referrerPolicy="no-referrer"
           loading="eager"
-          className="w-full h-auto aspect-square object-cover transition-transform duration-500 hover:scale-[1.02]"
+          className="w-full h-auto aspect-square object-cover transition-transform duration-300 group-hover:scale-[1.02]"
           onError={() => setError(true)}
         />
       </div>

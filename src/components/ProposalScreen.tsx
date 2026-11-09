@@ -1,12 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { Heart, Sparkles, MessageCircleHeart } from 'lucide-react';
-import { COUPLE_PROPOSAL_IMG } from '../assets/images';
+import { Heart, MessageCircleHeart } from 'lucide-react';
+import { CHIBI_COUPLE_PROPOSAL } from '../assets/images';
 import { CoupleIllustration } from './CoupleIllustration';
 import { playPlayfulBoing } from '../utils/audio';
+import { WindowFrame } from './WindowFrame';
 
 interface ProposalScreenProps {
   onYes: () => void;
-  partnerName: string;
+  partnerName?: string;
 }
 
 const FUNNY_NO_MESSAGES = [
@@ -37,23 +38,22 @@ export function ProposalScreen({ onYes, partnerName }: ProposalScreenProps) {
     const messageIndex = (nextCount - 1) % FUNNY_NO_MESSAGES.length;
     setCurrentFunnyMessage(FUNNY_NO_MESSAGES[messageIndex]);
 
-    // Playful small shift within safe boundaries (max 28px) so it never covers YES or leaves view
+    // Playful small shift within safe boundaries (max 26px) so it never covers YES or leaves window
     const offsets = [
-      { x: 18, y: -8 },
-      { x: -20, y: 10 },
-      { x: 22, y: 8 },
-      { x: -16, y: -10 },
-      { x: 12, y: 12 },
+      { x: 18, y: -6 },
+      { x: -18, y: 8 },
+      { x: 20, y: 6 },
+      { x: -15, y: -8 },
+      { x: 12, y: 10 },
     ];
     const chosenOffset = offsets[nextCount % offsets.length];
     setNoOffset(chosenOffset);
 
     // Brief wobble animation
     setIsWobbling(true);
-    setTimeout(() => setIsWobbling(false), 350);
+    setTimeout(() => setIsWobbling(false), 300);
   };
 
-  // Keyboard accessibility: handle space/enter on NO
   const handleNoKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -64,96 +64,88 @@ export function ProposalScreen({ onYes, partnerName }: ProposalScreenProps) {
     }
   };
 
-  // YES button scale factor, capped at 1.25 for clean layout integrity
-  const yesScale = Math.min(1 + noCount * 0.05, 1.22);
+  const yesScale = Math.min(1 + noCount * 0.05, 1.2);
+  const windowTitle = partnerName ? `TO ${partnerName.toUpperCase()} ♡ WITH ALL MY HEART` : 'THE QUESTION OF A LIFETIME';
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full max-w-2xl mx-auto flex flex-col items-center text-center px-4 py-6 sm:py-8 animate-in fade-in duration-500"
-    >
-      {/* Dedication label */}
-      <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-700/80 mb-3 tracking-wide">
-        <Sparkles className="w-4 h-4 text-rose-500" />
-        <span>{partnerName ? `From my heart to ${partnerName}` : 'The question of a lifetime'}</span>
-      </div>
+    <div ref={containerRef} className="w-full animate-entrance">
+      <WindowFrame title={windowTitle} stepIndicator=">>">
+        {/* Main Heading */}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#84364F] tracking-tight leading-snug text-center max-w-lg mb-2 font-display">
+          Will You Be Mine Forever? 💍❤️
+        </h1>
 
-      {/* Proposal Heading */}
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#4C0519] tracking-tight leading-tight max-w-xl text-balance mb-3">
-        Will You Be Mine Forever? 💍❤️
-      </h1>
+        {/* Description */}
+        <p className="text-sm sm:text-base text-[#84364F]/85 text-center max-w-md mb-6 leading-relaxed font-semibold">
+          I promise to annoy you, steal your snacks, send you silly memes, and love you even on your grumpiest days.
+        </p>
 
-      {/* Cute Emotional Description */}
-      <p className="text-base sm:text-lg text-rose-950/80 max-w-lg mb-6 leading-relaxed">
-        I promise to annoy you, steal your snacks, send you silly memes, and love you even on your grumpiest days.
-      </p>
-
-      {/* 2D Proposal Couple Illustration */}
-      <div className="w-full max-w-xs sm:max-w-sm mb-6">
-        <CoupleIllustration
-          src={COUPLE_PROPOSAL_IMG}
-          alt="Cute 2D proposal illustration with ring"
-          variant="proposal"
-        />
-      </div>
-
-      {/* Funny Speech Bubble when NO is clicked */}
-      {currentFunnyMessage && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-rose-50 border border-rose-200/90 text-rose-900 text-sm font-medium shadow-sm animate-in slide-in-from-bottom-2 duration-300"
-        >
-          <MessageCircleHeart className="w-4 h-4 text-rose-500 shrink-0" />
-          <span>{currentFunnyMessage}</span>
+        {/* Chibi Proposal Couple Illustration */}
+        <div className="w-full mb-5">
+          <CoupleIllustration
+            src={CHIBI_COUPLE_PROPOSAL}
+            alt="Cute chibi proposal illustration with ring box"
+            variant="proposal"
+          />
         </div>
-      )}
 
-      {/* Interactive Action Area */}
-      <div className="w-full max-w-md flex flex-col items-center justify-center gap-4 mt-2">
-        <div className="flex flex-row items-center justify-center gap-4 sm:gap-6 w-full flex-wrap">
-          {/* YES Button */}
-          <button
-            id="yes_button"
-            type="button"
-            onClick={onYes}
-            style={{ transform: `scale(${yesScale})` }}
-            className="min-h-[50px] min-w-[130px] sm:min-w-[150px] px-6 py-3 rounded-2xl bg-gradient-to-r from-rose-600 via-rose-500 to-pink-600 text-white font-extrabold text-base sm:text-lg shadow-lg shadow-rose-600/30 hover:shadow-xl hover:shadow-rose-600/45 hover:brightness-105 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose-400 z-10"
-          >
-            <Heart className="w-5 h-5 fill-white" />
-            <span className="whitespace-nowrap">YES! ❤️</span>
-          </button>
-
-          {/* NO Button */}
+        {/* Funny Speech Bubble when NO is clicked */}
+        {currentFunnyMessage && (
           <div
-            style={{
-              transform: `translate(${noOffset.x}px, ${noOffset.y}px)`,
-              transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
-            }}
-            className="inline-block"
+            role="status"
+            aria-live="polite"
+            className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#FAD5E0] border-[2px] border-[#84364F] text-[#84364F] text-xs sm:text-sm font-bold shadow-kawaii-sm animate-in slide-in-from-bottom-2 duration-300"
           >
-            <button
-              id="no_button"
-              type="button"
-              onClick={handleNoClick}
-              onKeyDown={handleNoKeyDown}
-              className={`min-h-[50px] min-w-[110px] px-5 py-3 rounded-2xl bg-rose-50/80 hover:bg-rose-100 text-rose-800/90 font-semibold text-sm sm:text-base border border-rose-200/90 shadow-xs hover:border-rose-300 active:scale-95 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose-300 ${
-                isWobbling ? 'animate-bounce' : ''
-              }`}
-              aria-label="No, playful rejection button"
-            >
-              <span className="whitespace-nowrap">NO 🙈</span>
-            </button>
+            <MessageCircleHeart className="w-4 h-4 text-[#B94E68] shrink-0" />
+            <span>{currentFunnyMessage}</span>
           </div>
-        </div>
-
-        {/* Playful hint text if NO was clicked */}
-        {noCount > 0 && (
-          <p className="text-xs text-rose-800/70 font-medium mt-1">
-            (P.S. The YES button gets sweeter every time you hesitate 😉)
-          </p>
         )}
-      </div>
+
+        {/* Interactive Action Buttons */}
+        <div className="w-full max-w-md flex flex-col items-center justify-center gap-3">
+          <div className="flex flex-row items-center justify-center gap-4 sm:gap-6 w-full flex-wrap">
+            {/* YES Button */}
+            <button
+              id="yes_button"
+              type="button"
+              onClick={onYes}
+              style={{ transform: `scale(${yesScale})` }}
+              className="min-h-[48px] min-w-[130px] sm:min-w-[145px] px-6 py-2.5 rounded-full bg-[#B94E68] hover:bg-[#A33F57] text-white font-bold text-base sm:text-lg border-[2.5px] border-[#84364F] shadow-kawaii-pill hover:shadow-kawaii-sm active:scale-95 transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#F3A0B4] z-10"
+            >
+              <Heart className="w-4 h-4 fill-white text-white" />
+              <span className="whitespace-nowrap font-display">YES! ♡</span>
+            </button>
+
+            {/* NO Button */}
+            <div
+              style={{
+                transform: `translate(${noOffset.x}px, ${noOffset.y}px)`,
+                transition: 'transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              }}
+              className="inline-block"
+            >
+              <button
+                id="no_button"
+                type="button"
+                onClick={handleNoClick}
+                onKeyDown={handleNoKeyDown}
+                className={`min-h-[48px] min-w-[110px] sm:min-w-[125px] px-5 py-2.5 rounded-full bg-[#FFF8F0] hover:bg-[#FCE8EF] text-[#84364F] font-bold text-base border-[2.5px] border-[#84364F] shadow-kawaii-pill hover:shadow-kawaii-sm active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#FAD5E0] ${
+                  isWobbling ? 'animate-bounce' : ''
+                }`}
+                aria-label="No, playful rejection button"
+              >
+                <span className="whitespace-nowrap font-display">NO 🙈</span>
+              </button>
+            </div>
+          </div>
+
+          {noCount > 0 && (
+            <p className="text-xs text-[#84364F]/75 font-bold mt-1 text-center">
+              (P.S. The YES button gets sweeter every time you hesitate 😉)
+            </p>
+          )}
+        </div>
+      </WindowFrame>
     </div>
   );
 }

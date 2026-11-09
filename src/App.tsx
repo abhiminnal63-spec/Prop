@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { TopNav } from './components/TopNav';
+import { DesktopSidebar } from './components/DesktopSidebar';
+import { DoodleDecorations } from './components/DoodleDecorations';
 import { FloatingHearts } from './components/FloatingHearts';
 import { LandingScreen } from './components/LandingScreen';
 import { ProposalScreen } from './components/ProposalScreen';
@@ -18,13 +20,10 @@ export default function App() {
   const [partnerName, setPartnerName] = useState('');
   const [senderName, setSenderName] = useState('');
 
-  // Auto-play the song when entering the website
+  // Auto-play the song when entering the website with mobile gesture fallback
   useEffect(() => {
-    // 1. Try to start music immediately upon load
     startMusic();
 
-    // 2. Many mobile/desktop browsers require a first user gesture to unlock Web Audio.
-    // Register one-shot interaction listeners to start playback immediately upon any touch/click/scroll.
     const unlockAudio = () => {
       if (!userMutedExplicitly.current) {
         startMusic();
@@ -54,7 +53,7 @@ export default function App() {
       if (urlTo) setPartnerName(urlTo);
       if (urlFrom) setSenderName(urlFrom);
     } catch {
-      // Ignore storage/url parsing errors
+      // Ignore URL parsing errors
     }
   }, []);
 
@@ -96,57 +95,69 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-between bg-[#FFFDF9] text-[#292524] overflow-x-hidden">
-      {/* Ambient floating hearts effect */}
+    <div className="relative min-h-screen flex flex-col justify-between bg-[#FCE8EF] bg-grid-paper text-[#84364F] overflow-x-hidden selection:bg-[#F3A0B4] selection:text-[#84364F]">
+      {/* Ambient floating hearts and cute doodles */}
       <FloatingHearts />
+      <DoodleDecorations />
 
-      {/* Top Bar Navigation */}
-      <TopNav
-        isMuted={isMuted}
-        onToggleSound={handleToggleSound}
-        currentStep={step}
-        onNavigateStep={(s) => setStep(s)}
-      />
+      {/* Navigation Layer */}
+      <div className="relative z-20 w-full max-w-6xl mx-auto px-3 sm:px-6 pt-2">
+        <TopNav
+          isMuted={isMuted}
+          onToggleSound={handleToggleSound}
+          currentStep={step}
+          onNavigateStep={(s) => setStep(s)}
+        />
+      </div>
 
-      {/* Main Content Area */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center py-6 sm:py-10">
-        {step === 'landing' && (
-          <LandingScreen
-            partnerName={partnerName}
-            senderName={senderName}
-            onOpenHeart={handleOpenHeart}
-          />
-        )}
+      {/* Main Layout Area matching Desktop & Mobile Reference */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-3 sm:px-6 py-2 sm:py-4 flex-1 flex flex-col md:flex-row items-stretch gap-5 lg:gap-6">
+        {/* Desktop Burgundy Left Sidebar */}
+        <DesktopSidebar
+          currentStep={step}
+          onNavigateStep={(s) => setStep(s)}
+        />
 
-        {step === 'proposal' && (
-          <ProposalScreen
-            partnerName={partnerName}
-            onYes={handleYes}
-          />
-        )}
+        {/* Central Window Screen Area */}
+        <main className="flex-1 flex flex-col items-center justify-center w-full">
+          {step === 'landing' && (
+            <LandingScreen
+              partnerName={partnerName}
+              senderName={senderName}
+              onOpenHeart={handleOpenHeart}
+            />
+          )}
 
-        {step === 'celebration' && (
-          <CelebrationScreen
-            partnerName={partnerName}
-            onComplete={handleCelebrationComplete}
-          />
-        )}
+          {step === 'proposal' && (
+            <ProposalScreen
+              partnerName={partnerName}
+              onYes={handleYes}
+            />
+          )}
 
-        {step === 'final' && (
-          <FinalScreen
-            onReplay={handleReplay}
-            partnerName={partnerName}
-            senderName={senderName}
-          />
-        )}
-      </main>
+          {step === 'celebration' && (
+            <CelebrationScreen
+              partnerName={partnerName}
+              onComplete={handleCelebrationComplete}
+            />
+          )}
 
-      {/* Subtle, unboxed footer with clean romantic typography */}
-      <footer className="relative z-10 py-6 text-center text-xs text-rose-900/60 border-t border-rose-100/60 bg-[#FFFDF9]/60">
-        <div className="flex items-center justify-center gap-2 flex-wrap">
-          <span>Crafted with all the love in the world</span>
+          {step === 'final' && (
+            <FinalScreen
+              onReplay={handleReplay}
+              partnerName={partnerName}
+              senderName={senderName}
+            />
+          )}
+        </main>
+      </div>
+
+      {/* Cute Romantic Footer */}
+      <footer className="relative z-10 py-4 text-center text-xs font-bold text-[#84364F]/70 font-display">
+        <div className="flex items-center justify-center gap-2 flex-wrap px-4">
+          <span>Crafted with all the love in the world ♡</span>
           <span aria-hidden="true">·</span>
-          <span>A proposal made for two</span>
+          <span>A romantic proposal made for two</span>
         </div>
       </footer>
     </div>

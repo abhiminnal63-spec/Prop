@@ -1,4 +1,4 @@
-import { Volume2, VolumeX, Heart } from 'lucide-react';
+import { Music, VolumeX, Heart, Home, Gift } from 'lucide-react';
 
 interface TopNavProps {
   isMuted: boolean;
@@ -13,58 +13,91 @@ export function TopNav({
   currentStep,
   onNavigateStep,
 }: TopNavProps) {
-  return (
-    <header className="sticky top-0 z-40 bg-[#FFFDF9]/90 backdrop-blur-md border-b border-rose-100/80 px-4 sm:px-6 py-3 transition-colors">
-      <div className="max-w-5xl mx-auto flex items-center justify-between gap-8">
-        {/* Zone 1: Brand Wordmark (Single text element) */}
-        <button
-          onClick={() => onNavigateStep('landing')}
-          className="flex items-center gap-2 text-rose-900 font-bold text-lg sm:text-xl tracking-tight whitespace-nowrap shrink-0 hover:text-rose-700 active:scale-95 transition-all focus-visible:outline-rose-500 rounded-md cursor-pointer"
-        >
-          <Heart className="w-5 h-5 fill-rose-500 text-rose-500 animate-pulse-gentle" />
-          <span>My Love</span>
-        </button>
+  const isQuestionActive = currentStep === 'proposal' || currentStep === 'celebration';
 
-        {/* Zone 2: Clean single-line navigation links */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-rose-950/70">
+  return (
+    <header className="w-full select-none z-30 mb-2">
+      {/* Mobile Top Bar (< md) */}
+      <div className="md:hidden flex flex-col gap-2.5 px-4 pt-3 pb-2 bg-[#FCE8EF]/95 backdrop-blur-xs border-b border-[#84364F]/15">
+        <div className="flex items-center justify-between">
+          {/* Brand */}
           <button
             onClick={() => onNavigateStep('landing')}
-            className={`whitespace-nowrap shrink-0 hover:text-rose-900 active:scale-95 transition-all cursor-pointer ${
-              currentStep === 'landing' ? 'text-rose-900 font-semibold' : ''
-            }`}
+            className="flex items-center gap-1.5 text-[#84364F] font-extrabold text-lg font-display active:scale-95 transition-transform"
           >
-            Start
+            <Heart className="w-5 h-5 fill-[#B94E68] text-[#B94E68] animate-pulse-gentle" />
+            <span>My Love</span>
           </button>
-          <button
-            onClick={() => onNavigateStep('proposal')}
-            className={`whitespace-nowrap shrink-0 hover:text-rose-900 active:scale-95 transition-all cursor-pointer ${
-              currentStep === 'proposal' ? 'text-rose-900 font-semibold' : ''
-            }`}
-          >
-            Question
-          </button>
-          <button
-            onClick={() => onNavigateStep('final')}
-            className={`whitespace-nowrap shrink-0 hover:text-rose-900 active:scale-95 transition-all cursor-pointer ${
-              currentStep === 'final' ? 'text-rose-900 font-semibold' : ''
-            }`}
-          >
-            Vows & Perks
-          </button>
-        </nav>
 
-        {/* Zone 3: Primary Action (Audio Control) */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Music Button */}
           <button
             onClick={onToggleSound}
-            title={isMuted ? 'Turn romantic music on' : 'Mute music'}
-            className="min-h-[44px] min-w-[44px] px-3 py-1.5 rounded-full text-rose-800 bg-rose-50 hover:bg-rose-100 active:scale-95 border border-rose-200/80 flex items-center justify-center gap-1.5 text-xs font-medium transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-rose-500"
+            className="min-h-[38px] px-3.5 py-1 rounded-full bg-white text-[#84364F] border-[2px] border-[#84364F] shadow-kawaii-sm flex items-center gap-1.5 text-xs font-bold font-display active:scale-95 transition-all cursor-pointer"
             aria-label={isMuted ? 'Unmute music' : 'Mute music'}
           >
-            {isMuted ? <VolumeX className="w-4 h-4 text-rose-500" /> : <Volume2 className="w-4 h-4 text-rose-600 animate-pulse" />}
-            <span className="hidden sm:inline">{isMuted ? 'Music Off' : 'Music On'}</span>
+            {isMuted ? (
+              <VolumeX className="w-3.5 h-3.5 text-[#84364F]" />
+            ) : (
+              <Music className="w-3.5 h-3.5 text-[#B94E68] animate-bounce" />
+            )}
+            <span>{isMuted ? 'Music Off' : 'Music On'}</span>
           </button>
         </div>
+
+        {/* Mobile Navigation Tabs */}
+        <div className="flex items-center justify-center gap-2 p-1 bg-[#FAD5E0]/60 rounded-full border-[1.5px] border-[#84364F]/30">
+          <button
+            onClick={() => onNavigateStep('landing')}
+            className={`flex-1 py-1.5 px-2 rounded-full text-xs font-extrabold font-display transition-all flex items-center justify-center gap-1 ${
+              currentStep === 'landing'
+                ? 'bg-white text-[#84364F] shadow-kawaii-sm border-[1.5px] border-[#84364F]'
+                : 'text-[#84364F]/70 hover:text-[#84364F]'
+            }`}
+          >
+            <Home className="w-3 h-3" />
+            <span>Start</span>
+          </button>
+
+          <button
+            onClick={() => onNavigateStep('proposal')}
+            className={`flex-1 py-1.5 px-2 rounded-full text-xs font-extrabold font-display transition-all flex items-center justify-center gap-1 ${
+              isQuestionActive
+                ? 'bg-white text-[#84364F] shadow-kawaii-sm border-[1.5px] border-[#84364F]'
+                : 'text-[#84364F]/70 hover:text-[#84364F]'
+            }`}
+          >
+            <Heart className="w-3 h-3" />
+            <span>Question</span>
+          </button>
+
+          <button
+            onClick={() => onNavigateStep('final')}
+            className={`flex-1 py-1.5 px-2 rounded-full text-xs font-extrabold font-display transition-all flex items-center justify-center gap-1 ${
+              currentStep === 'final'
+                ? 'bg-white text-[#84364F] shadow-kawaii-sm border-[1.5px] border-[#84364F]'
+                : 'text-[#84364F]/70 hover:text-[#84364F]'
+            }`}
+          >
+            <Gift className="w-3 h-3" />
+            <span>Vows & Perks</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Top Bar (md+) matching reference design: single Music pill button on right */}
+      <div className="hidden md:flex items-center justify-end px-2 pt-2 pb-1">
+        <button
+          onClick={onToggleSound}
+          className="min-h-[40px] px-4 py-1.5 rounded-full bg-white text-[#84364F] border-[2px] border-[#84364F] shadow-kawaii-sm flex items-center gap-2 text-xs sm:text-sm font-bold font-display hover:bg-[#FFF8F0] active:scale-95 transition-all cursor-pointer"
+          aria-label={isMuted ? 'Unmute music' : 'Mute music'}
+        >
+          {isMuted ? (
+            <VolumeX className="w-4 h-4 text-[#84364F]" />
+          ) : (
+            <Music className="w-4 h-4 text-[#B94E68] animate-bounce" />
+          )}
+          <span>{isMuted ? 'Music Off' : 'Music On'}</span>
+        </button>
       </div>
     </header>
   );
